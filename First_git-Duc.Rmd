@@ -1,0 +1,103 @@
+---
+title: "International Merchandise Trade Statistics Highlights"
+author: "Lo Thi Duc"
+date: "`r Sys.Date()`"
+output:
+  word_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+    toc_float: true
+    code_folding: hide
+
+---
+# Data analysis
+We provide here some basic elements about the data set and descriptive statistics on some variables of interest.  
+
+* First we load the data
+* second we print a summary
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(magrittr) 
+library(dplyr)
+library(flextable)
+library(ggplot2)
+setwd("C:/Users/ltduc.TCTK/OneDrive/diske/coursera/SIAP/Automated Reports")
+TradeData <- read.csv("Data/TradeData.csv")
+head(TradeData)
+```
+
+We loaded the data set and compile the  report on `r Sys.Date()`
+
+## Summary statistics
+Here are some summary statistics of the export value (*Stat_Value* variable), all products combined:
+
+```{r }
+summary(TradeData$Stat_Value)
+```
+
+The data set contains   **`r  nrow(TradeData)`  observations**, and  **`r  ncol(TradeData)`** variables.
+
+Here is a list of all variables available in the data set: 
+
+```{r}
+names(TradeData)
+```
+
+## Type of exports
+
+The variable *Principle_Export* list all the types of goods exported from Vanuatu. There are **`r length(unique(TradeData$Principle_Exports))`** different goods exported. Let's have the list of all these goods. 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+unique(TradeData$Principle_Exports)
+
+```
+## Analysis of Vanuatu's exports
+### Principle exports statistics
+
+The table below show all principle exports and their total values in USD: 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(dplyr) 
+library(tidyverse)
+library(flextable)
+ExportsByType <- TradeData %>%
+ group_by(Principle_Exports) %>%
+ summarise(total = sum(Stat_Value)) %>%
+ arrange(desc(total))
+
+flextable(ExportsByType)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+max_row <- ExportsByType[which.max(ExportsByType$total), ]
+min_row <- ExportsByType[which.min(ExportsByType$total), ]
+```
+
+
+**`r max_row$Principle_Exports`** has been exported in the highest value of all principle exports; it is **USD `r max_row$total`**, whereas **`r min_row$Principle_Exports`** is the smallest; at only **USD `r min_row$total`**
+
+### Identity of Exports from Vanuatu, 2000-2010
+
+The graph depicts the volume of all export products in the 2000-2010 period.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+ExportsByType %>%
+ ggplot()+
+ aes(x = Principle_Exports, y = total) +
+ geom_bar(stat = "identity") + 
+ labs(title ="Exports from Vanuatu [ 2000-2010] ", 
+      subtitle = "National Statistical Office",
+      caption = paste("Date: ",Sys.Date()),
+      x= "Exports categories",
+      y = "Vatu") +
+ coord_flip()
+
+```
+
