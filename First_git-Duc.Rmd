@@ -1,5 +1,5 @@
 ---
-title: "International Merchandise Trade Statistics Highlights"
+title: "My First file for Git"
 author: "Lo Thi Duc"
 date: "`r Sys.Date()`"
 output:
@@ -13,7 +13,7 @@ output:
     code_folding: hide
 
 ---
-# Data analysis
+# Data analysis that will be automated
 We provide here some basic elements about the data set and descriptive statistics on some variables of interest.  
 
 * First we load the data
