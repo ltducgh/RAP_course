@@ -51,7 +51,7 @@ Here is a list of all variables available in the data set:
 names(TradeData)
 ```
 
-## Type of exports
+## Type of Principle Exports
 
 The variable *Principle_Export* list all the types of goods exported from Vanuatu. There are **`r length(unique(TradeData$Principle_Exports))`** different goods exported. Let's have the list of all these goods. 
 
